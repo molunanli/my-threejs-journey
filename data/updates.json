@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2025-07-05",
+    "type": "demo",
+    "title": "旋转立方体基础实现",
+    "description": "完成第一个Three.js场景，包含相机控制与旋转动画",
+    "link": "demos/01-rotating-cube/",
+    "tags": ["基础", "动画"]
+  },
+  {
+    "date": "2025-07-03",
+    "type": "article",
+    "title": "Three.js核心概念解析",
+    "description": "详细解析Scene, Camera, Renderer三大核心组件",
+    "link": "/concepts/core-concepts/",
+    "tags": ["概念", "基础"]
+  },
+  {
+    "date": "2025-07-01",
+    "type": "project",
+    "title": "知识库结构搭建完成",
+    "description": "建立完整的学习目录体系与文档模板",
+    "link": "/docs/structure/",
+    "tags": ["文档", "管理"]
+  }
+]

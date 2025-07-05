@@ -4,23 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Three.js 学习之旅 - 知识库首页</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --primary: #3498db;
-      --primary-dark: #2980b9;
       --secondary: #2c3e50;
-      --secondary-light: #34495e;
       --light: #ecf0f1;
       --success: #2ecc71;
-      --success-light: #27ae60;
       --warning: #f39c12;
-      --danger: #e74c3c;
-      --purple: #9b59b6;
-      --dark: #1a2530;
-      --gray: #95a5a6;
-      --light-gray: #f8f9fa;
     }
     
     * {
@@ -33,147 +23,14 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
       color: #333;
-      background-color: var(--light-gray);
-      background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
-      background-attachment: fixed;
+      background-color: #f8f9fa;
     }
     
-    /* 导航栏 */
-    .navbar {
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
-      color: white;
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    
-    .logo-icon {
-      color: var(--primary);
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-    
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      padding: 8px 12px;
-      border-radius: 4px;
-    }
-    
-    .nav-links a:hover {
-      background-color: rgba(255,255,255,0.1);
-    }
-    
-    .nav-links a.active {
-      background-color: var(--primary);
-    }
-    
-    /* 头部区域 */
     header {
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
+      background: linear-gradient(135deg, var(--secondary), #1a2530);
       color: white;
-      padding: 5rem 1rem 3rem;
+      padding: 2rem 1rem;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .header-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    .header-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.1;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100" fill="white"/></svg>');
-      background-size: 120px;
-    }
-    
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .cta-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    
-    .btn {
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    }
-    
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(52, 152, 219, 0.5);
-    }
-    
-    .btn-outline {
-      background: transparent;
-      color: white;
-      border: 2px solid white;
-    }
-    
-    .btn-outline:hover {
-      background: rgba(255,255,255,0.1);
-      transform: translateY(-3px);
     }
     
     .container {
@@ -184,50 +41,23 @@
     
     section {
       margin: 3rem 0;
-      padding: 2.5rem;
+      padding: 2rem;
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      position: relative;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
     
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
     
     h2 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: var(--secondary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    h2 i {
-      background: var(--primary);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.5rem;
-    }
-    
-    .view-all {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-    
-    .view-all:hover {
-      color: var(--primary-dark);
-      text-decoration: underline;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
     }
     
     /* 学习目标样式 */
@@ -240,179 +70,22 @@
     
     .card {
       border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 1.8rem;
+      border-radius: 8px;
+      padding: 1.5rem;
       position: relative;
       transition: transform 0.3s ease;
-      background: white;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 5px;
-      height: 100%;
-      background: var(--primary);
     }
     
     .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    }
-    
-    .progress-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.2rem;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     
     .progress-bar {
-      flex-grow: 1;
-      height: 8px;
-      background-color: #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-right: 10px;
-    }
-    
-    .progress-fill {
-      height: 100%;
+      height: 5px;
       background-color: var(--success);
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-    
-    .progress-percent {
-      font-weight: bold;
-      color: var(--secondary);
-      min-width: 40px;
-    }
-    
-    .card h3 {
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
-      color: var(--secondary);
-    }
-    
-    .card ul {
-      list-style-type: none;
-    }
-    
-    .card li {
-      padding: 8px 0;
-      padding-left: 28px;
-      position: relative;
-      border-bottom: 1px dashed #eee;
-    }
-    
-    .card li:last-child {
-      border-bottom: none;
-    }
-    
-    .card li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #eee;
-    }
-    
-    .card li.completed::before {
-      background: var(--success);
-      content: '✓';
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-    }
-    
-    .card li.in-progress::before {
-      background: var(--warning);
-      content: '↻';
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      animation: spin 1.5s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .card li.pending::before {
-      background: #ddd;
-    }
-    
-    /* 知识图谱 */
-    .knowledge-map {
-      display: flex;
-      height: 300px;
-      margin-top: 2rem;
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-    }
-    
-    .map-node {
-      position: absolute;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: var(--secondary);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      z-index: 2;
-    }
-    
-    .map-node:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      z-index: 3;
-    }
-    
-    .map-node.core {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .map-node.important {
-      background: var(--success);
-      color: white;
-    }
-    
-    .map-node.advanced {
-      background: var(--purple);
-      color: white;
-    }
-    
-    .map-canvas {
-      flex-grow: 1;
-      position: relative;
-    }
-    
-    .map-lines {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
+      border-radius: 3px;
+      margin-bottom: 1rem;
     }
     
     /* 最新动态样式 */
@@ -424,29 +97,14 @@
     
     .update-card {
       border-left: 4px solid var(--primary);
-      padding: 1.5rem;
-      background-color: white;
+      padding: 1.2rem 1.5rem;
+      background-color: #f8f9fa;
       transition: all 0.3s ease;
-      border-radius: 0 8px 8px 0;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
     }
     
     .update-card:hover {
-      background-color: #f0f9ff;
-      transform: translateX(10px);
-    }
-    
-    .update-icon {
-      font-size: 1.8rem;
-      color: var(--primary);
-      min-width: 50px;
-      text-align: center;
-    }
-    
-    .update-content {
-      flex-grow: 1;
+      background-color: #e3f2fd;
+      transform: translateX(5px);
     }
     
     .update-header {
@@ -460,315 +118,82 @@
     .update-type {
       font-weight: bold;
       color: var(--primary);
-      background: rgba(52, 152, 219, 0.1);
-      padding: 2px 10px;
-      border-radius: 20px;
     }
     
     .tags {
       display: flex;
       gap: 0.5rem;
       margin-top: 0.8rem;
-      flex-wrap: wrap;
     }
     
     .tags span {
       background-color: #e0e7ff;
       color: #4f46e5;
-      padding: 0.3rem 0.8rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 20px;
       font-size: 0.8rem;
-      font-weight: 500;
     }
     
     /* 项目展示区 */
     .demo-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.8rem;
+      gap: 1.5rem;
     }
     
     .demo-card {
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-      transition: all 0.4s ease;
-      background: white;
-      position: relative;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
     }
     
     .demo-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.15);
     }
     
     .demo-image {
-      height: 200px;
-      background: linear-gradient(135deg, #3498db, #2c3e50);
+      height: 180px;
+      background-color: #eee;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4rem;
-      color: rgba(255,255,255,0.9);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .demo-image::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="0" y="0" width="200" height="200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
-      background-size: 40px;
+      font-size: 3rem;
     }
     
     .demo-info {
-      padding: 1.5rem;
+      padding: 1.2rem;
       background: white;
     }
     
-    .demo-info h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: var(--secondary);
-    }
-    
-    .demo-info p {
-      color: #666;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-    
-    .demo-status {
-      display: inline-block;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-    
-    .status-completed {
-      background: rgba(46, 204, 113, 0.2);
-      color: var(--success-light);
-    }
-    
-    .status-in-progress {
-      background: rgba(243, 156, 18, 0.2);
-      color: var(--warning);
-    }
-    
-    .status-planned {
-      background: rgba(149, 165, 166, 0.2);
-      color: var(--gray);
-    }
-    
-    /* 资源推荐 */
-    .resources {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    
-    .resource-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.8rem;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-      border-left: 4px solid var(--primary);
-    }
-    
-    .resource-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    
-    .resource-icon {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    
-    .resource-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.8rem;
-      color: var(--secondary);
-    }
-    
-    .resource-card p {
-      color: #666;
-      margin-bottom: 1.2rem;
-    }
-    
-    /* 页脚 */
     footer {
-      background: linear-gradient(135deg, var(--secondary), var(--dark));
-      color: white;
-      padding: 4rem 0 2rem;
-      margin-top: 4rem;
-    }
-    
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 0 20px;
-    }
-    
-    .footer-column h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-      position: relative;
-      padding-bottom: 0.8rem;
-    }
-    
-    .footer-column h3::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 50px;
-      height: 3px;
-      background: var(--primary);
-    }
-    
-    .footer-links {
-      list-style: none;
-    }
-    
-    .footer-links li {
-      margin-bottom: 0.8rem;
-    }
-    
-    .footer-links a {
-      color: #ecf0f1;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .footer-links a:hover {
-      color: var(--primary);
-      padding-left: 5px;
-    }
-    
-    .social-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    
-    .social-links a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      transition: all 0.3s ease;
-      font-size: 1.2rem;
-    }
-    
-    .social-links a:hover {
-      background: var(--primary);
-      transform: translateY(-3px);
-    }
-    
-    .copyright {
       text-align: center;
-      padding-top: 3rem;
-      color: #bdc3c7;
-      font-size: 0.9rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 3rem 20px 0;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 2rem;
+      background-color: var(--secondary);
+      color: white;
+      margin-top: 3rem;
     }
     
-    .copyright a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-    
-    /* 响应式设计 */
     @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      .goal-cards, .demo-grid, .resources {
+      .goal-cards {
         grid-template-columns: 1fr;
-      }
-      
-      section {
-        padding: 1.8rem;
-      }
-      
-      .cta-buttons {
-        flex-direction: column;
-        gap: 0.8rem;
-      }
-      
-      .btn {
-        width: 100%;
-        text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <!-- 导航栏 -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <i class="fas fa-cube logo-icon"></i>
-        <span>Three.js Journey</span>
-      </div>
-      <div class="nav-links">
-        <a href="#intro" class="active">首页</a>
-        <a href="#goals">学习目标</a>
-        <a href="#demos">项目展示</a>
-        <a href="#updates">最新动态</a>
-        <a href="#resources">学习资源</a>
-        <a href="#"><i class="fas fa-search"></i></a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- 头部区域 -->
   <header>
-    <div class="header-bg"></div>
-    <div class="header-content">
+    <div class="container">
       <h1>Three.js 学习之旅</h1>
-      <p class="subtitle">从零开始探索 WebGL 与 3D 网页开发，掌握现代前端 3D 可视化技术</p>
-      <div class="cta-buttons">
-        <a href="#demos" class="btn btn-primary">查看项目演示</a>
-        <a href="https://github.com" target="_blank" class="btn btn-outline">访问 GitHub 仓库</a>
-      </div>
+      <p>从零开始探索 WebGL 与 3D 网页开发</p>
     </div>
   </header>
 
   <main class="container">
     <!-- 知识库介绍 -->
     <section id="intro">
-      <div class="section-header">
-        <h2><i class="fas fa-book-open"></i> 知识库介绍</h2>
-        <a href="#" class="view-all">查看完整学习路线 <i class="fas fa-arrow-right"></i></a>
-      </div>
+      <h2>📚 知识库介绍</h2>
       <p>欢迎来到我的 Three.js 学习之旅！本知识库记录我从零开始学习 WebGL 和 Three.js 的完整过程，包含：</p>
       <ul>
         <li>🔹 核心概念详解与学习笔记</li>
@@ -777,366 +202,149 @@
         <li>🔹 学习资源与工具推荐</li>
       </ul>
       <p>通过系统化整理学习内容，既加深理解，也为后来者提供参考。所有项目均可在线交互体验！</p>
-      
-      <div class="knowledge-map">
-        <div class="map-canvas" id="knowledge-map">
-          <!-- 知识图谱将由JS生成 -->
-        </div>
-      </div>
     </section>
 
     <!-- 学习目标 -->
     <section id="goals">
-      <div class="section-header">
-        <h2><i class="fas fa-bullseye"></i> 当前学习目标</h2>
-        <a href="#" class="view-all">查看全部目标 <i class="fas fa-arrow-right"></i></a>
-      </div>
+      <h2>🎯 当前学习目标</h2>
       <div class="goal-cards">
         <div class="card">
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 30%"></div>
-            </div>
-            <div class="progress-percent">30%</div>
-          </div>
+          <div class="progress-bar" style="width: 30%"></div>
           <h3>基础场景搭建</h3>
           <ul>
-            <li class="completed">场景(Scene)与相机(Camera)</li>
-            <li class="completed">渲染器(Renderer)配置</li>
-            <li class="in-progress">坐标系系统理解</li>
-            <li class="pending">自适应响应式布局</li>
+            <li>✅ 场景(Scene)与相机(Camera)</li>
+            <li>✅ 渲染器(Renderer)配置</li>
+            <li>🔄 坐标系系统理解</li>
+            <li>◻️ 自适应响应式布局</li>
           </ul>
         </div>
         
         <div class="card">
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 10%"></div>
-            </div>
-            <div class="progress-percent">10%</div>
-          </div>
+          <div class="progress-bar" style="width: 10%"></div>
           <h3>光照与材质</h3>
           <ul>
-            <li class="completed">基础材质(MeshBasicMaterial)</li>
-            <li class="in-progress">光源类型(Point, Directional)</li>
-            <li class="pending">物理材质(MeshPhysicalMaterial)</li>
-            <li class="pending">环境光遮蔽(AO)</li>
+            <li>✅ 基础材质(MeshBasicMaterial)</li>
+            <li>🔄 光源类型(Point, Directional)</li>
+            <li>◻️ 物理材质(MeshPhysicalMaterial)</li>
+            <li>◻️ 环境光遮蔽(AO)</li>
           </ul>
         </div>
         
         <div class="card">
-          <div class="progress-container">
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 5%"></div>
-            </div>
-            <div class="progress-percent">5%</div>
-          </div>
+          <div class="progress-bar" style="width: 5%"></div>
           <h3>模型加载与动画</h3>
           <ul>
-            <li class="pending">GLTF 模型加载</li>
-            <li class="pending">骨骼动画处理</li>
-            <li class="pending">自定义着色器</li>
+            <li>◻️ GLTF 模型加载</li>
+            <li>◻️ 骨骼动画处理</li>
+            <li>◻️ 自定义着色器</li>
           </ul>
         </div>
-      </div>
-    </section>
-
-    <!-- 项目展示 -->
-    <section id="demos">
-      <div class="section-header">
-        <h2><i class="fas fa-rocket"></i> 项目展示</h2>
-        <a href="#" class="view-all">查看所有项目 <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="demo-grid">
-        <a href="/demos/01-rotating-cube/" class="demo-card">
-          <div class="demo-image">
-            <i class="fas fa-cube"></i>
-          </div>
-          <div class="demo-info">
-            <h3>旋转立方体</h3>
-            <p>基础场景搭建与动画实现，掌握Three.js核心概念</p>
-            <span class="demo-status status-completed">已完成</span>
-          </div>
-        </a>
-        
-        <a href="#" class="demo-card">
-          <div class="demo-image">
-            <i class="fas fa-lightbulb"></i>
-          </div>
-          <div class="demo-info">
-            <h3>光源系统探索</h3>
-            <p>不同类型光源效果对比，实现动态光照效果</p>
-            <span class="demo-status status-in-progress">开发中</span>
-          </div>
-        </a>
-        
-        <a href="#" class="demo-card">
-          <div class="demo-image">
-            <i class="fas fa-globe-americas"></i>
-          </div>
-          <div class="demo-info">
-            <h3>3D地球仪</h3>
-            <p>使用纹理贴图创建交互式3D地球仪</p>
-            <span class="demo-status status-planned">计划中</span>
-          </div>
-        </a>
-        
-        <a href="#" class="demo-card">
-          <div class="demo-image">
-            <i class="fas fa-gamepad"></i>
-          </div>
-          <div class="demo-info">
-            <h3>简易3D游戏</h3>
-            <p>基于Three.js的3D跑酷游戏开发</p>
-            <span class="demo-status status-planned">计划中</span>
-          </div>
-        </a>
       </div>
     </section>
 
     <!-- 最新动态 -->
     <section id="updates">
-      <div class="section-header">
-        <h2><i class="fas fa-sync-alt"></i> 最新动态</h2>
-        <a href="#" class="view-all">查看所有动态 <i class="fas fa-arrow-right"></i></a>
-      </div>
+      <h2>🔄 最新动态</h2>
       <div id="update-feed" class="update-container">
         <!-- 动态内容由JS生成 -->
       </div>
     </section>
 
-    <!-- 资源推荐 -->
-    <section id="resources">
-      <div class="section-header">
-        <h2><i class="fas fa-graduation-cap"></i> 学习资源</h2>
-        <a href="#" class="view-all">更多资源 <i class="fas fa-arrow-right"></i></a>
-      </div>
-      <div class="resources">
-        <div class="resource-card">
-          <div class="resource-icon">
-            <i class="fab fa-youtube"></i>
+    <!-- 项目展示 -->
+    <section id="demos">
+      <h2>🚀 项目展示</h2>
+      <div class="demo-grid">
+        <a href="demos/01-rotating-cube/" class="demo-card">
+          <div class="demo-image">🟦</div>
+          <div class="demo-info">
+            <h3>旋转立方体</h3>
+            <p>基础场景搭建与动画实现</p>
           </div>
-          <h3>Three.js 官方教程</h3>
-          <p>官方提供的入门教程和案例，适合初学者快速上手。</p>
-          <a href="#" class="btn btn-outline" style="border-color: #3498db; color: #3498db;">访问资源</a>
-        </div>
+        </a>
         
-        <div class="resource-card">
-          <div class="resource-icon">
-            <i class="fas fa-book"></i>
+        <a href="#" class="demo-card">
+          <div class="demo-image">💡</div>
+          <div class="demo-info">
+            <h3>光源系统探索</h3>
+            <p>（开发中）不同类型光源效果对比</p>
           </div>
-          <h3>WebGL 编程指南</h3>
-          <p>深入讲解WebGL底层原理，帮助理解Three.js的实现机制。</p>
-          <a href="#" class="btn btn-outline" style="border-color: #3498db; color: #3498db;">访问资源</a>
-        </div>
+        </a>
         
-        <div class="resource-card">
-          <div class="resource-icon">
-            <i class="fab fa-github"></i>
+        <a href="#" class="demo-card">
+          <div class="demo-image">🌐</div>
+          <div class="demo-info">
+            <h3>模型加载器</h3>
+            <p>（即将开始）GLTF模型加载实践</p>
           </div>
-          <h3>Awesome Three.js</h3>
-          <p>GitHub上整理的Three.js优秀资源集合，包含教程、库和示例。</p>
-          <a href="#" class="btn btn-outline" style="border-color: #3498db; color: #3498db;">访问资源</a>
-        </div>
+        </a>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="footer-content">
-      <div class="footer-column">
-        <h3>Three.js 学习之旅</h3>
-        <p>记录从零开始学习WebGL和Three.js的完整过程，分享学习资源和实战项目。</p>
-        <div class="social-links">
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-discord"></i></a>
-        </div>
-      </div>
-      
-      <div class="footer-column">
-        <h3>快速链接</h3>
-        <ul class="footer-links">
-          <li><a href="#intro"><i class="fas fa-chevron-right"></i> 知识库介绍</a></li>
-          <li><a href="#goals"><i class="fas fa-chevron-right"></i> 学习目标</a></li>
-          <li><a href="#demos"><i class="fas fa-chevron-right"></i> 项目展示</a></li>
-          <li><a href="#updates"><i class="fas fa-chevron-right"></i> 最新动态</a></li>
-          <li><a href="#resources"><i class="fas fa-chevron-right"></i> 学习资源</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-column">
-        <h3>学习资源</h3>
-        <ul class="footer-links">
-          <li><a href="#"><i class="fas fa-chevron-right"></i> Three.js 官方文档</a></li>
-          <li><a href="#"><i class="fas fa-chevron-right"></i> WebGL 基础教程</a></li>
-          <li><a href="#"><i class="fas fa-chevron-right"></i> 3D 数学基础</a></li>
-          <li><a href="#"><i class="fas fa-chevron-right"></i> GLTF 模型资源</a></li>
-          <li><a href="#"><i class="fas fa-chevron-right"></i> 着色器编程</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-column">
-        <h3>联系我</h3>
-        <ul class="footer-links">
-          <li><a href="#"><i class="fas fa-envelope"></i> contact@example.com</a></li>
-          <li><a href="#"><i class="fab fa-github"></i> GitHub: @yourusername</a></li>
-          <li><a href="#"><i class="fab fa-twitter"></i> Twitter: @yourhandle</a></li>
-          <li><a href="#"><i class="fas fa-blog"></i> 个人技术博客</a></li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="copyright">
-      <p>© 2025 Three.js 学习之旅 | 持续更新中 | 本网站仅用于学习目的</p>
-      <p>GitHub: <a href="https://github.com/你的用户名/my-threejs-journey">源码仓库</a></p>
+    <div class="container">
+      <p>© 2025 Three.js 学习之旅 | 持续更新中</p>
+      <p>GitHub: <a href="https://github.com/你的用户名/my-threejs-journey" style="color: #fff;">源码仓库</a></p>
     </div>
   </footer>
 
   <script>
-    // 动态加载更新内容
-    const updates = [
-      {
-        type: 'demo',
-        title: '旋转立方体项目完成',
-        date: '2025-07-03',
-        description: '完成了第一个Three.js项目：旋转立方体，实现了基础场景搭建和动画效果。',
-        link: '#',
-        tags: ['threejs', 'webgl', 'demo']
-      },
-      {
-        type: 'article',
-        title: 'Three.js相机系统详解',
-        date: '2025-07-01',
-        description: '发布新文章：深入讲解Three.js中各种相机的使用场景和配置方法。',
-        link: '#',
-        tags: ['tutorial', 'camera', 'threejs']
-      },
-      {
-        type: 'update',
-        title: '知识库结构调整',
-        date: '2025-06-28',
-        description: '优化了知识库结构，新增了学习路线图，便于系统化学习。',
-        link: '#',
-        tags: ['update', 'structure']
-      },
-      {
-        type: 'resource',
-        title: '新增学习资源推荐',
-        date: '2025-06-25',
-        description: '添加了Three.js官方教程、WebGL编程指南等优质学习资源。',
-        link: '#',
-        tags: ['resources', 'learning']
-      },
-      {
-        type: 'demo',
-        title: '光源系统探索项目启动',
-        date: '2025-06-20',
-        description: '开始开发第二个项目：不同类型光源效果对比，实现动态光照效果。',
-        link: '#',
-        tags: ['lighting', 'demo', 'in-progress']
-      }
-    ];
-    
-    // 渲染更新内容
-    const updateContainer = document.getElementById('update-feed');
-    
-    updates.forEach(item => {
-      const typeIcon = item.type === 'demo' ? '🚀' : 
-                      item.type === 'article' ? '📝' : 
-                      item.type === 'resource' ? '📚' : '🔄';
-      
-      const updateEl = document.createElement('div');
-      updateEl.className = 'update-card';
-      updateEl.innerHTML = `
-        <div class="update-icon">${typeIcon}</div>
-        <div class="update-content">
-          <div class="update-header">
-            <span class="update-date">${item.date}</span>
-            <span class="update-type">${item.type}</span>
-          </div>
-          <h3><a href="${item.link}">${item.title}</a></h3>
-          <p>${item.description}</p>
-          <div class="tags">
-            ${item.tags.map(tag => `<span>${tag}</span>`).join('')}
-          </div>
-        </div>
-      `;
-      updateContainer.appendChild(updateEl);
-    });
-    
-    // 创建知识图谱
-    function createKnowledgeMap() {
-      const container = document.getElementById('knowledge-map');
-      
-      // 创建节点
-      const nodes = [
-        { id: 'core', name: 'Three.js 核心', type: 'core', x: 50, y: 50 },
-        { id: 'scene', name: '场景(Scene)', type: 'important', x: 20, y: 30 },
-        { id: 'camera', name: '相机(Camera)', type: 'important', x: 80, y: 30 },
-        { id: 'renderer', name: '渲染器(Renderer)', type: 'important', x: 50, y: 70 },
-        { id: 'geometry', name: '几何体', type: 'important', x: 20, y: 70 },
-        { id: 'material', name: '材质', type: 'important', x: 80, y: 70 },
-        { id: 'light', name: '光照系统', type: 'advanced', x: 30, y: 90 },
-        { id: 'animation', name: '动画系统', type: 'advanced', x: 70, y: 90 },
-        { id: 'loader', name: '模型加载', type: 'advanced', x: 50, y: 110 }
-      ];
-      
-      // 创建连接线
-      const lines = [
-        { from: 'core', to: 'scene' },
-        { from: 'core', to: 'camera' },
-        { from: 'core', to: 'renderer' },
-        { from: 'core', to: 'geometry' },
-        { from: 'core', to: 'material' },
-        { from: 'geometry', to: 'material' },
-        { from: 'material', to: 'light' },
-        { from: 'renderer', to: 'animation' },
-        { from: 'geometry', to: 'loader' }
-      ];
-      
-      // 添加连接线
-      const linesContainer = document.createElement('div');
-      linesContainer.className = 'map-lines';
-      linesContainer.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"></svg>';
-      container.appendChild(linesContainer);
-      const svg = linesContainer.querySelector('svg');
-      
-      lines.forEach(line => {
-        const fromNode = nodes.find(n => n.id === line.from);
-        const toNode = nodes.find(n => n.id === line.to);
-        
-        if (fromNode && toNode) {
-          const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          lineEl.setAttribute('x1', fromNode.x);
-          lineEl.setAttribute('y1', fromNode.y);
-          lineEl.setAttribute('x2', toNode.x);
-          lineEl.setAttribute('y2', toNode.y);
-          lineEl.setAttribute('stroke', '#3498db');
-          lineEl.setAttribute('stroke-width', '0.5');
-          lineEl.setAttribute('stroke-opacity', '0.6');
-          svg.appendChild(lineEl);
-        }
-      });
-      
-      // 添加节点
-      nodes.forEach(node => {
-        const nodeEl = document.createElement('div');
-        nodeEl.className = `map-node map-node-${node.type}`;
-        nodeEl.style.left = `${node.x}%`;
-        nodeEl.style.top = `${node.y}%`;
-        nodeEl.style.width = node.type === 'core' ? '60px' : '50px';
-        nodeEl.style.height = node.type === 'core' ? '60px' : '50px';
-        nodeEl.style.fontSize = node.type === 'core' ? '0.8rem' : '0.7rem';
-        nodeEl.textContent = node.name;
-        container.appendChild(nodeEl);
-      });
-    }
-    
-    // 初始化页面
+    // GitHub Pages 兼容的数据加载方案
     document.addEventListener('DOMContentLoaded', function() {
-      createKnowledgeMap();
+      // 获取仓库名称（自动适配 GitHub Pages 路径）
+      const repoName = window.location.pathname.split('/')[1] || '';
+      const basePath = repoName ? `/${repoName}` : '';
+      
+      // 动态加载更新内容
+      fetch(`${basePath}/data/updates.json`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('网络响应异常');
+          }
+          return response.json();
+        })
+        .then(updates => {
+          const container = document.getElementById('update-feed');
+          
+          // 清空加载状态
+          container.innerHTML = '';
+          
+          updates.slice(0, 5).forEach(item => {
+            const typeIcon = item.type === 'demo' ? '🚀' : 
+                            item.type === 'article' ? '📝' : '🏗️';
+            
+            const updateEl = document.createElement('div');
+            updateEl.className = 'update-card';
+            
+            // 确保链接正确（添加基础路径）
+            const itemLink = item.link.startsWith('http') ? 
+                            item.link : 
+                            `${basePath}${item.link.startsWith('/') ? '' : '/'}${item.link}`;
+            
+            updateEl.innerHTML = `
+              <div class="update-header">
+                <span class="update-date">${item.date}</span>
+                <span class="update-type">${typeIcon} ${item.type}</span>
+              </div>
+              <h3><a href="${itemLink}">${item.title}</a></h3>
+              <p>${item.description}</p>
+              <div class="tags">
+                ${item.tags.map(tag => `<span>#${tag}</span>`).join('')}
+              </div>
+            `;
+            container.appendChild(updateEl);
+          });
+        })
+        .catch(error => {
+          console.error('加载更新数据失败:', error);
+          document.getElementById('update-feed').innerHTML = `
+            <div class="update-card">
+              <p>⚠️ 暂时无法加载最新动态</p>
+              <p>错误信息: ${error.message}</p>
+              <p>请检查 data/updates.json 文件是否存在</p>
+            </div>
+          `;
+        });
     });
   </script>
 </body>
