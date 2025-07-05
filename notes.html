@@ -18,6 +18,8 @@
             --text-light: #7f8c8d;
             --border: #e0e0e0;
             --shadow: rgba(0, 0, 0, 0.05);
+            --success: #2ecc71;
+            --warning: #f39c12;
         }
         
         * {
@@ -92,6 +94,9 @@
             text-decoration: none;
             opacity: 0.9;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .nav-links a:hover {
@@ -154,6 +159,17 @@
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:disabled:hover {
+            background: var(--bg-light);
+            color: inherit;
+            border-color: var(--border);
         }
         
         /* 笔记内容 */
@@ -260,6 +276,9 @@
             color: white;
             text-decoration: none;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .footer-links a:hover {
@@ -300,6 +319,11 @@
             .note-title {
                 font-size: 1.8rem;
             }
+            
+            .note-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
         }
         
         /* 加载指示器 */
@@ -319,6 +343,132 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* 错误提示 */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid #e74c3c;
+            padding: 1.5rem;
+            border-radius: 0 6px 6px 0;
+            margin: 1rem 0;
+        }
+        
+        /* 标签样式 */
+        .tag {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tag i {
+            font-size: 0.8em;
+        }
+        
+        /* 笔记预览卡片 */
+        .notes-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .note-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .note-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+        
+        .note-card p {
+            color: var(--text-light);
+            flex-grow: 1;
+            margin-bottom: 1.2rem;
+        }
+        
+        .note-card .meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+            margin-top: auto;
+        }
+        
+        .note-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        
+        .note-card .tag {
+            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+        }
+        
+        .back-to-list {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-list:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin: 2rem 0 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -335,8 +485,8 @@
                 </div>
             </div>
             <div class="nav-links">
-                <a href="#"><i class="fas fa-home"></i> 首页</a>
-                <a href="#"><i class="fas fa-book"></i> 笔记列表</a>
+                <a href="index.html"><i class="fas fa-home"></i> 首页</a>
+                <a href="#" id="notes-list-link"><i class="fas fa-book"></i> 笔记列表</a>
                 <a href="#"><i class="fas fa-project-diagram"></i> 3D项目</a>
             </div>
         </div>
@@ -344,30 +494,49 @@
     
     <!-- 笔记容器 -->
     <div class="note-container">
-        <div class="note-nav">
-            <div class="note-info">
-                <h1 class="note-title" id="note-title">Three.js核心概念</h1>
-                <div class="note-meta">
-                    <span><i class="far fa-calendar"></i> 2023-11-20</span>
-                    <span><i class="fas fa-tags"></i> 基础, 概念</span>
-                    <span><i class="far fa-clock"></i> 阅读时间 8分钟</span>
+        <!-- 笔记列表视图 -->
+        <div id="notes-list-view" style="display: none;">
+            <h1 class="section-title"><i class="fas fa-book"></i> 全部学习笔记</h1>
+            <p>以下是系统化的Three.js学习笔记，涵盖核心概念、实战技巧和高级主题。</p>
+            
+            <div id="notes-list-container" class="notes-preview">
+                <div class="loader">
+                    <i class="fas fa-spinner"></i>
+                    <p>正在加载笔记列表...</p>
                 </div>
-            </div>
-            <div class="nav-buttons">
-                <button class="nav-btn" id="prev-btn">
-                    <i class="fas fa-arrow-left"></i> 上一篇
-                </button>
-                <button class="nav-btn" id="next-btn">
-                    下一篇 <i class="fas fa-arrow-right"></i>
-                </button>
             </div>
         </div>
         
-        <div class="note-content">
-            <div class="markdown-body" id="note-content">
-                <div class="loader">
-                    <i class="fas fa-spinner"></i>
-                    <p>正在加载笔记内容...</p>
+        <!-- 单个笔记视图 -->
+        <div id="note-detail-view">
+            <div class="note-nav">
+                <div class="note-info">
+                    <a href="#" id="back-to-list" class="back-to-list">
+                        <i class="fas fa-arrow-left"></i> 返回笔记列表
+                    </a>
+                    <h1 class="note-title" id="note-title">Three.js核心概念</h1>
+                    <div class="note-meta">
+                        <span class="tag"><i class="far fa-calendar"></i> <span id="note-date">2023-11-20</span></span>
+                        <span class="tag"><i class="fas fa-tags"></i> <span id="note-tags">基础, 概念</span></span>
+                        <span class="tag"><i class="far fa-clock"></i> 阅读时间 <span id="read-time">8</span>分钟</span>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="prev-btn" disabled>
+                        <i class="fas fa-arrow-left"></i> 上一篇
+                    </button>
+                    <button class="nav-btn" id="next-btn" disabled>
+                        下一篇 <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="note-content">
+                <div class="markdown-body" id="note-content">
+                    <div class="loader">
+                        <i class="fas fa-spinner"></i>
+                        <p>正在加载笔记内容...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,7 +548,7 @@
             <p>Three.js学习笔记库 &copy; 2023 - 使用GitHub Pages部署</p>
             <div class="footer-links">
                 <a href="#"><i class="fab fa-github"></i> 源码仓库</a>
-                <a href="#"><i class="fas fa-book"></i> Three.js文档</a>
+                <a href="https://threejs.org/docs/" target="_blank"><i class="fas fa-book"></i> Three.js文档</a>
                 <a href="#"><i class="fas fa-envelope"></i> 联系作者</a>
             </div>
             <p>笔记内容通过Markdown文件存储，使用Git进行版本控制</p>
@@ -387,70 +556,160 @@
     </footer>
 
     <script>
-        // 笔记配置文件
-        const notesConfig = {
-            // 笔记列表 - 实际项目中可替换为JSON文件
-            notes: [
-                {
-                    id: "core-concepts",
-                    title: "Three.js核心概念",
-                    filename: "notes/core-concepts.md",
-                    date: "2023-11-20",
-                    tags: ["基础", "概念"]
-                },
-                {
-                    id: "scene-camera",
-                    title: "场景与相机详解",
-                    filename: "notes/scene-camera.md",
-                    date: "2023-11-18",
-                    tags: ["场景", "相机"]
-                },
-                {
-                    id: "geometry-materials",
-                    title: "几何体与材质",
-                    filename: "notes/geometry-materials.md",
-                    date: "2023-11-15",
-                    tags: ["几何", "材质"]
-                }
-            ],
-            
-            // 当前笔记索引
-            currentNoteIndex: 0
-        };
+        // 全局变量
+        let notesList = [];
+        let currentNoteIndex = 0;
+        let basePath = '';
+        
+        // 设置Marked.js选项
+        marked.setOptions({
+            gfm: true,
+            breaks: true,
+            smartLists: true,
+            smartypants: true
+        });
         
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
-            // 设置Marked.js选项
-            marked.setOptions({
-                gfm: true,
-                breaks: true,
-                smartLists: true,
-                smartypants: true
-            });
+            // 获取基础路径（适配GitHub Pages）
+            basePath = getBasePath();
             
-            // 加载当前笔记
-            loadCurrentNote();
+            // 加载笔记列表
+            loadNotesList();
             
             // 设置导航按钮事件
             document.getElementById('prev-btn').addEventListener('click', loadPrevNote);
             document.getElementById('next-btn').addEventListener('click', loadNextNote);
+            document.getElementById('back-to-list').addEventListener('click', showNotesList);
+            document.getElementById('notes-list-link').addEventListener('click', showNotesList);
+            
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const noteId = urlParams.get('id');
+            
+            // 如果URL中有笔记ID参数，则显示该笔记
+            if (noteId) {
+                loadNoteById(noteId);
+            } else {
+                // 默认显示第一篇笔记
+                loadCurrentNote();
+            }
         });
+        
+        // 获取基础路径
+        function getBasePath() {
+            const pathSegments = window.location.pathname.split('/').filter(Boolean);
+            const repoName = pathSegments.length > 0 ? pathSegments[0] : '';
+            return repoName ? `/${repoName}` : '';
+        }
+        
+        // 加载笔记列表
+        function loadNotesList() {
+            fetch(`${basePath}/data/notes.json`)
+                .then(response => {
+                    if (!response.ok) throw new Error('笔记列表加载失败');
+                    return response.json();
+                })
+                .then(notes => {
+                    notesList = notes;
+                    renderNotesList();
+                })
+                .catch(error => {
+                    document.getElementById('notes-list-container').innerHTML = `
+                        <div class="error-message">
+                            <h3>数据加载错误</h3>
+                            <p>${error.message}</p>
+                            <p>请确保 data/notes.json 文件存在</p>
+                        </div>
+                    `;
+                });
+        }
+        
+        // 渲染笔记列表
+        function renderNotesList() {
+            const container = document.getElementById('notes-list-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            notesList.forEach((note, index) => {
+                const noteCard = document.createElement('div');
+                noteCard.className = 'note-card';
+                noteCard.innerHTML = `
+                    <h3>${note.title}</h3>
+                    <p>${note.description || 'Three.js学习笔记，包含核心概念和实践技巧'}</p>
+                    <div class="tags">
+                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="meta">
+                        <span><i class="far fa-calendar"></i> ${note.date}</span>
+                        <span><i class="far fa-file"></i> ${Math.ceil(Math.random() * 15) + 5}分钟阅读</span>
+                    </div>
+                `;
+                
+                noteCard.addEventListener('click', () => {
+                    currentNoteIndex = index;
+                    loadCurrentNote();
+                    showNoteDetail();
+                });
+                
+                container.appendChild(noteCard);
+            });
+        }
+        
+        // 显示笔记列表视图
+        function showNotesList(e) {
+            if (e) e.preventDefault();
+            document.getElementById('notes-list-view').style.display = 'block';
+            document.getElementById('note-detail-view').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        
+        // 显示笔记详情视图
+        function showNoteDetail() {
+            document.getElementById('notes-list-view').style.display = 'none';
+            document.getElementById('note-detail-view').style.display = 'block';
+            window.scrollTo(0, 0);
+            
+            // 更新URL
+            const noteId = notesList[currentNoteIndex].id;
+            window.history.pushState(null, '', `?id=${noteId}`);
+        }
         
         // 加载当前笔记
         function loadCurrentNote() {
-            const note = notesConfig.notes[notesConfig.currentNoteIndex];
-            if (!note) return;
+            if (!notesList.length) return;
+            
+            const note = notesList[currentNoteIndex];
             
             // 更新标题和元数据
             document.getElementById('note-title').textContent = note.title;
-            document.querySelector('.note-meta').innerHTML = `
-                <span><i class="far fa-calendar"></i> ${note.date}</span>
-                <span><i class="fas fa-tags"></i> ${note.tags.join(', ')}</span>
-                <span><i class="far fa-clock"></i> 阅读时间 8分钟</span>
-            `;
+            document.getElementById('note-date').textContent = note.date;
+            document.getElementById('note-tags').textContent = note.tags.join(', ');
+            document.getElementById('read-time').textContent = Math.ceil(Math.random() * 10) + 5;
+            
+            // 更新导航按钮状态
+            document.getElementById('prev-btn').disabled = currentNoteIndex === 0;
+            document.getElementById('next-btn').disabled = currentNoteIndex === notesList.length - 1;
             
             // 加载Markdown内容
             loadMarkdownFile(note.filename);
+            
+            // 显示笔记详情视图
+            showNoteDetail();
+        }
+        
+        // 通过ID加载笔记
+        function loadNoteById(id) {
+            const index = notesList.findIndex(note => note.id === id);
+            if (index !== -1) {
+                currentNoteIndex = index;
+                loadCurrentNote();
+            } else {
+                // 如果没找到，显示第一篇笔记
+                currentNoteIndex = 0;
+                loadCurrentNote();
+            }
         }
         
         // 加载Markdown文件
@@ -463,163 +722,51 @@
                 </div>
             `;
             
-            // 模拟从服务器加载Markdown文件
-            setTimeout(() => {
-                // 在实际项目中，这里应该是fetch请求
-                // fetch(filename)
-                //   .then(response => response.text())
-                //   .then(text => renderMarkdown(text))
-                //   .catch(error => showError(error))
-                
-                // 模拟内容
-                const markdownContent = getMockMarkdownContent(filename);
-                renderMarkdown(markdownContent);
-            }, 800);
+            // 从服务器加载Markdown文件
+            fetch(`${basePath}/${filename}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('笔记内容加载失败');
+                    return response.text();
+                })
+                .then(text => {
+                    renderMarkdown(text);
+                })
+                .catch(error => {
+                    contentContainer.innerHTML = `
+                        <div class="error-message">
+                            <h3>文件加载错误</h3>
+                            <p>${error.message}</p>
+                            <p>请确保 ${filename} 文件存在</p>
+                        </div>
+                    `;
+                });
         }
         
         // 渲染Markdown内容
         function renderMarkdown(content) {
             const htmlContent = marked.parse(content);
             document.getElementById('note-content').innerHTML = htmlContent;
+            
+            // 添加代码高亮（可选）
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
         }
         
         // 加载上一篇笔记
         function loadPrevNote() {
-            if (notesConfig.currentNoteIndex > 0) {
-                notesConfig.currentNoteIndex--;
+            if (currentNoteIndex > 0) {
+                currentNoteIndex--;
                 loadCurrentNote();
-            } else {
-                alert("已经是第一篇笔记");
             }
         }
         
         // 加载下一篇笔记
         function loadNextNote() {
-            if (notesConfig.currentNoteIndex < notesConfig.notes.length - 1) {
-                notesConfig.currentNoteIndex++;
+            if (currentNoteIndex < notesList.length - 1) {
+                currentNoteIndex++;
                 loadCurrentNote();
-            } else {
-                alert("已经是最后一篇笔记");
             }
-        }
-        
-        // 模拟Markdown内容
-        function getMockMarkdownContent(filename) {
-            if (filename.includes("core-concepts")) {
-                return `# Three.js 核心概念
-
-## 场景(Scene)
-场景是Three.js中所有3D对象的容器。就像舞台一样，所有要显示的对象都需要添加到场景中才能被渲染。
-
-\`\`\`javascript
-// 创建场景
-const scene = new THREE.Scene();
-\`\`\`
-
-## 相机(Camera)
-相机决定了我们如何观看场景。Three.js提供多种相机类型：
-
-- **透视相机(PerspectiveCamera)**：模拟人眼视角，最常用
-- **正交相机(OrthographicCamera)**：无透视效果，适合工程制图
-
-\`\`\`javascript
-// 创建透视相机
-const camera = new THREE.PerspectiveCamera(
-  75, // 视野角度(FOV)
-  window.innerWidth / window.innerHeight, // 宽高比
-  0.1, // 近截面
-  1000 // 远截面
-);
-\`\`\`
-
-## 渲染器(Renderer)
-渲染器负责将场景和相机的内容渲染到网页上：
-
-\`\`\`javascript
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-\`\`\`
-
-## 基本渲染循环
-要让场景动起来，需要设置渲染循环：
-
-\`\`\`javascript
-function animate() {
-  requestAnimationFrame(animate);
-  
-  // 更新物体位置/旋转等
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  
-  // 渲染场景
-  renderer.render(scene, camera);
-}
-animate();
-\`\`\`
-
-## 核心概念关系
-
-| 概念 | 作用 | 常用API |
-|------|------|---------|
-| 场景(Scene) | 3D对象容器 | add(), remove() |
-| 相机(Camera) | 视角控制 | PerspectiveCamera, position |
-| 渲染器(Renderer) | 画面输出 | WebGLRenderer, render() |
-
-## 学习要点
-
-1. **场景的组织结构**：树状层次关系
-2. **相机参数设置**：FOV、宽高比、近远截面
-3. **渲染器选择**：WebGLRenderer vs CSS3DRenderer
-4. **动画循环**：requestAnimationFrame的使用
-
-> 提示：Three.js的核心概念是构建3D应用的基础，理解这些概念对后续学习至关重要。
-`;
-            }
-            
-            return `# ${filename.replace('notes/', '').replace('.md', '')}
-            
-## 这是示例笔记内容
-
-在实际应用中，这里将显示从Markdown文件加载的真实内容。
-
-### Three.js 学习要点
-
-1. **场景创建与设置**
-   - 添加背景
-   - 设置雾效果
-   - 管理场景对象
-
-2. **相机控制**
-   - 轨道控制器(OrbitControls)
-   - 第一人称控制器
-   - 相机动画
-
-3. **光照系统**
-   - 环境光(AmbientLight)
-   - 方向光(DirectionalLight)
-   - 点光源(PointLight)
-   - 聚光灯(SpotLight)
-
-### 代码示例
-
-\`\`\`javascript
-// 创建旋转立方体
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-// 设置相机位置
-camera.position.z = 5;
-\`\`\`
-
-### 学习资源
-
-- [Three.js 官方文档](https://threejs.org/docs/)
-- [Three.js 示例库](https://threejs.org/examples/)
-- [MDN WebGL 指南](https://developer.mozilla.org/zh-CN/docs/Web/API/WebGL_API/Tutorial)
-`;
         }
     </script>
 </body>
