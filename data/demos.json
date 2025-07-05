@@ -1,0 +1,34 @@
+[
+  {
+    "title": "旋转立方体",
+    "description": "基础场景搭建与动画实现，包含相机控制",
+    "link": "demos/01-rotating-cube/",
+    "icon": "fa-cube",
+    "date": "2023-10-28",
+    "status": "completed"
+  },
+  {
+    "title": "光源系统探索",
+    "description": "不同类型光源效果对比与交互实现",
+    "link": "demos/02-lighting-effects/",
+    "icon": "fa-lightbulb",
+    "date": "2023-11-15",
+    "status": "in-progress"
+  },
+  {
+    "title": "GLTF模型加载器",
+    "description": "实现复杂3D模型加载与基础材质应用",
+    "link": "demos/03-model-loader/",
+    "icon": "fa-shapes",
+    "date": "2023-11-20",
+    "status": "planned"
+  },
+  {
+    "title": "交互式3D场景",
+    "description": "实现场景漫游与物体交互功能",
+    "link": "demos/04-interactive-scene/",
+    "icon": "fa-compass",
+    "date": "2023-12-01",
+    "status": "planned"
+  }
+]

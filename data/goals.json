@@ -1,0 +1,31 @@
+[
+  {
+    "title": "基础场景搭建",
+    "progress": 65,
+    "tasks": [
+      {"name": "场景(Scene)与相机(Camera)", "status": "completed"},
+      {"name": "渲染器(Renderer)配置", "status": "completed"},
+      {"name": "坐标系系统理解", "status": "in-progress"},
+      {"name": "自适应响应式布局", "status": ""}
+    ]
+  },
+  {
+    "title": "光照与材质",
+    "progress": 30,
+    "tasks": [
+      {"name": "基础材质(MeshBasicMaterial)", "status": "completed"},
+      {"name": "光源类型(Point, Directional)", "status": "in-progress"},
+      {"name": "物理材质(MeshPhysicalMaterial)", "status": ""},
+      {"name": "环境光遮蔽(AO)", "status": ""}
+    ]
+  },
+  {
+    "title": "模型加载与动画",
+    "progress": 15,
+    "tasks": [
+      {"name": "GLTF 模型加载", "status": "in-progress"},
+      {"name": "骨骼动画处理", "status": ""},
+      {"name": "自定义着色器", "status": ""}
+    ]
+  }
+]

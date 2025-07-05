@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Three.js 学习之旅 - 知识库首页</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #3498db;
@@ -11,6 +12,8 @@
       --light: #ecf0f1;
       --success: #2ecc71;
       --warning: #f39c12;
+      --danger: #e74c3c;
+      --dark: #1a2530;
     }
     
     * {
@@ -20,17 +23,33 @@
     }
     
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
       line-height: 1.6;
       color: #333;
-      background-color: #f8f9fa;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
     }
     
     header {
-      background: linear-gradient(135deg, var(--secondary), #1a2530);
+      background: linear-gradient(135deg, var(--secondary), var(--dark));
       color: white;
       padding: 2rem 1rem;
       text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: rotate(30deg);
     }
     
     .container {
@@ -39,144 +58,444 @@
       padding: 0 20px;
     }
     
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 1rem;
+    }
+    
+    .logo-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      background: rgba(255,255,255,0.1);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    
     section {
-      margin: 3rem 0;
+      margin: 2.5rem 0;
       padding: 2rem;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     }
     
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
     }
     
     h2 {
       font-size: 1.8rem;
       color: var(--secondary);
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
+      margin-bottom: 1.8rem;
+      padding-bottom: 0.8rem;
       border-bottom: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    h2 i {
+      background: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    
+    /* 加载指示器 */
+    .loader {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+    }
+    
+    .loader i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: spin 1.5s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 知识库介绍 */
+    #intro {
+      background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+      border: 1px solid rgba(52, 152, 219, 0.2);
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
     }
     
     /* 学习目标样式 */
     .goal-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+      gap: 1.8rem;
+      margin-top: 1.2rem;
     }
     
     .card {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      padding: 1.8rem;
       position: relative;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary);
     }
     
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .progress-container {
+      margin-bottom: 1.5rem;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--secondary);
     }
     
     .progress-bar {
-      height: 5px;
-      background-color: var(--success);
-      border-radius: 3px;
-      margin-bottom: 1rem;
+      height: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+    
+    .task-list {
+      list-style: none;
+    }
+    
+    .task-list li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      padding-left: 1.8rem;
+      position: relative;
+    }
+    
+    .task-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .task-list li.completed::before {
+      content: "✓";
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+    
+    .task-list li.in-progress::before {
+      content: "↻";
+      animation: pulse 2s infinite;
+      background: var(--warning);
+      color: white;
+      border-color: var(--warning);
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
     
     /* 最新动态样式 */
     .update-container {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1.5rem;
     }
     
     .update-card {
       border-left: 4px solid var(--primary);
-      padding: 1.2rem 1.5rem;
-      background-color: #f8f9fa;
+      padding: 1.5rem;
+      background: linear-gradient(to right, rgba(52, 152, 219, 0.03) 0%, white 30%);
       transition: all 0.3s ease;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      flex-direction: column;
     }
     
     .update-card:hover {
-      background-color: #e3f2fd;
-      transform: translateX(5px);
+      background: linear-gradient(to right, rgba(52, 152, 219, 0.08) 0%, #f8f9fa 30%);
+      transform: translateX(8px);
     }
     
     .update-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: #666;
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+      color: #6c757d;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .update-date {
+      background: rgba(52, 152, 219, 0.1);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 500;
     }
     
     .update-type {
-      font-weight: bold;
+      font-weight: 600;
       color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .update-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
     }
     
     .tags {
       display: flex;
-      gap: 0.5rem;
-      margin-top: 0.8rem;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
     }
     
     .tags span {
       background-color: #e0e7ff;
       color: #4f46e5;
-      padding: 0.2rem 0.6rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
+      font-weight: 500;
     }
     
     /* 项目展示区 */
     .demo-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
+      gap: 1.8rem;
+      margin-top: 1.2rem;
     }
     
     .demo-card {
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      transition: all 0.4s ease;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
     
     .demo-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     }
     
     .demo-image {
-      height: 180px;
-      background-color: #eee;
+      height: 200px;
+      background: linear-gradient(135deg, #2c3e50, #4a6491);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      font-size: 4rem;
+      color: rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .demo-image::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      transform: rotate(30deg);
     }
     
     .demo-info {
-      padding: 1.2rem;
-      background: white;
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .demo-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      color: var(--secondary);
+    }
+    
+    .demo-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid #e9ecef;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .demo-status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+    
+    .status-completed {
+      background: rgba(46, 204, 113, 0.15);
+      color: var(--success);
+    }
+    
+    .status-inprogress {
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--warning);
+    }
+    
+    .status-planned {
+      background: rgba(108, 117, 125, 0.15);
+      color: #6c757d;
     }
     
     footer {
       text-align: center;
-      padding: 2rem;
-      background-color: var(--secondary);
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, var(--secondary), var(--dark));
       color: white;
       margin-top: 3rem;
+      position: relative;
+    }
+    
+    .footer-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      color: white;
+      text-decoration: none;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    
+    .github-link:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-3px);
     }
     
     @media (max-width: 768px) {
-      .goal-cards {
+      section {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .goal-cards, .features {
+        grid-template-columns: 1fr;
+      }
+      
+      .demo-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -185,166 +504,286 @@
 <body>
   <header>
     <div class="container">
-      <h1>Three.js 学习之旅</h1>
-      <p>从零开始探索 WebGL 与 3D 网页开发</p>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+        <div>
+          <h1>Three.js 学习之旅</h1>
+          <p class="subtitle">从零开始探索 WebGL 与 3D 网页开发，记录学习历程，分享知识成果</p>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="container">
     <!-- 知识库介绍 -->
     <section id="intro">
-      <h2>📚 知识库介绍</h2>
-      <p>欢迎来到我的 Three.js 学习之旅！本知识库记录我从零开始学习 WebGL 和 Three.js 的完整过程，包含：</p>
-      <ul>
-        <li>🔹 核心概念详解与学习笔记</li>
-        <li>🔹 渐进式实战项目与代码示例</li>
-        <li>🔹 常见问题解决与踩坑记录</li>
-        <li>🔹 学习资源与工具推荐</li>
-      </ul>
-      <p>通过系统化整理学习内容，既加深理解，也为后来者提供参考。所有项目均可在线交互体验！</p>
+      <h2><i class="fa-solid fa-book"></i> 知识库介绍</h2>
+      <p>欢迎来到我的 Three.js 学习之旅！本知识库系统化记录从零开始学习 WebGL 和 Three.js 的完整过程，内容包含：</p>
+      
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <h3>核心概念</h3>
+          <p>场景、相机、渲染器、几何体、材质、光照等核心概念详解与学习笔记</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-laptop-code"></i>
+          </div>
+          <h3>实战项目</h3>
+          <p>渐进式实战项目与完整代码示例，每个项目均可在线交互体验</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <h3>问题解决</h3>
+          <p>常见问题解决与踩坑记录，帮助避开学习道路上的陷阱</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3>学习资源</h3>
+          <p>精选学习资源与工具推荐，加速学习曲线</p>
+        </div>
+      </div>
     </section>
 
     <!-- 学习目标 -->
     <section id="goals">
-      <h2>🎯 当前学习目标</h2>
-      <div class="goal-cards">
-        <div class="card">
-          <div class="progress-bar" style="width: 30%"></div>
-          <h3>基础场景搭建</h3>
-          <ul>
-            <li>✅ 场景(Scene)与相机(Camera)</li>
-            <li>✅ 渲染器(Renderer)配置</li>
-            <li>🔄 坐标系系统理解</li>
-            <li>◻️ 自适应响应式布局</li>
-          </ul>
-        </div>
-        
-        <div class="card">
-          <div class="progress-bar" style="width: 10%"></div>
-          <h3>光照与材质</h3>
-          <ul>
-            <li>✅ 基础材质(MeshBasicMaterial)</li>
-            <li>🔄 光源类型(Point, Directional)</li>
-            <li>◻️ 物理材质(MeshPhysicalMaterial)</li>
-            <li>◻️ 环境光遮蔽(AO)</li>
-          </ul>
-        </div>
-        
-        <div class="card">
-          <div class="progress-bar" style="width: 5%"></div>
-          <h3>模型加载与动画</h3>
-          <ul>
-            <li>◻️ GLTF 模型加载</li>
-            <li>◻️ 骨骼动画处理</li>
-            <li>◻️ 自定义着色器</li>
-          </ul>
+      <h2><i class="fa-solid fa-bullseye"></i> 当前学习目标</h2>
+      <div id="goals-container" class="goal-cards">
+        <div class="loader">
+          <i class="fa-solid fa-spinner"></i>
+          <p>正在加载学习目标数据...</p>
         </div>
       </div>
     </section>
 
     <!-- 最新动态 -->
     <section id="updates">
-      <h2>🔄 最新动态</h2>
+      <h2><i class="fa-solid fa-bolt"></i> 最新动态</h2>
       <div id="update-feed" class="update-container">
-        <!-- 动态内容由JS生成 -->
+        <div class="loader">
+          <i class="fa-solid fa-spinner"></i>
+          <p>正在加载最新动态...</p>
+        </div>
       </div>
     </section>
 
     <!-- 项目展示 -->
     <section id="demos">
-      <h2>🚀 项目展示</h2>
-      <div class="demo-grid">
-        <a href="demos/01-rotating-cube/" class="demo-card">
-          <div class="demo-image">🟦</div>
-          <div class="demo-info">
-            <h3>旋转立方体</h3>
-            <p>基础场景搭建与动画实现</p>
-          </div>
-        </a>
-        
-        <a href="#" class="demo-card">
-          <div class="demo-image">💡</div>
-          <div class="demo-info">
-            <h3>光源系统探索</h3>
-            <p>（开发中）不同类型光源效果对比</p>
-          </div>
-        </a>
-        
-        <a href="#" class="demo-card">
-          <div class="demo-image">🌐</div>
-          <div class="demo-info">
-            <h3>模型加载器</h3>
-            <p>（即将开始）GLTF模型加载实践</p>
-          </div>
-        </a>
+      <h2><i class="fa-solid fa-rocket"></i> 项目展示</h2>
+      <div id="demos-container" class="demo-grid">
+        <div class="loader">
+          <i class="fa-solid fa-spinner"></i>
+          <p>正在加载项目数据...</p>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      <p>© 2025 Three.js 学习之旅 | 持续更新中</p>
-      <p>GitHub: <a href="https://github.com/你的用户名/my-threejs-journey" style="color: #fff;">源码仓库</a></p>
+      <div class="footer-content">
+        <h3>Three.js 学习之旅</h3>
+        <p>记录学习过程，分享知识成果，构建个人技术知识体系</p>
+        <a href="https://github.com/your-username/my-threejs-journey" class="github-link">
+          <i class="fab fa-github"></i> 访问 GitHub 仓库
+        </a>
+        <p style="margin-top: 2rem; opacity: 0.8; font-size: 0.9rem;">© 2023 - 2025 Three.js 学习之旅 | 持续更新中</p>
+      </div>
     </div>
   </footer>
 
   <script>
-    // GitHub Pages 兼容的数据加载方案
+    // GitHub Pages 路径适配
     document.addEventListener('DOMContentLoaded', function() {
       // 获取仓库名称（自动适配 GitHub Pages 路径）
-      const repoName = window.location.pathname.split('/')[1] || '';
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      const repoName = pathSegments.length > 0 ? pathSegments[0] : '';
       const basePath = repoName ? `/${repoName}` : '';
       
-      // 动态加载更新内容
-      fetch(`${basePath}/data/updates.json`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('网络响应异常');
-          }
-          return response.json();
-        })
-        .then(updates => {
-          const container = document.getElementById('update-feed');
-          
-          // 清空加载状态
-          container.innerHTML = '';
-          
-          updates.slice(0, 5).forEach(item => {
-            const typeIcon = item.type === 'demo' ? '🚀' : 
-                            item.type === 'article' ? '📝' : '🏗️';
-            
-            const updateEl = document.createElement('div');
-            updateEl.className = 'update-card';
-            
-            // 确保链接正确（添加基础路径）
-            const itemLink = item.link.startsWith('http') ? 
-                            item.link : 
-                            `${basePath}${item.link.startsWith('/') ? '' : '/'}${item.link}`;
-            
-            updateEl.innerHTML = `
-              <div class="update-header">
-                <span class="update-date">${item.date}</span>
-                <span class="update-type">${typeIcon} ${item.type}</span>
-              </div>
-              <h3><a href="${itemLink}">${item.title}</a></h3>
-              <p>${item.description}</p>
-              <div class="tags">
-                ${item.tags.map(tag => `<span>#${tag}</span>`).join('')}
+      // 加载学习目标数据
+      loadGoalsData();
+      // 加载最新动态数据
+      loadUpdatesData();
+      // 加载项目数据
+      loadDemosData();
+      
+      // 加载学习目标数据
+      function loadGoalsData() {
+        fetch(`${basePath}/data/goals.json`)
+          .then(response => {
+            if (!response.ok) throw new Error('学习目标数据加载失败');
+            return response.json();
+          })
+          .then(goals => renderGoals(goals))
+          .catch(error => {
+            document.getElementById('goals-container').innerHTML = `
+              <div class="update-card">
+                <h3>数据加载错误</h3>
+                <p>${error.message}</p>
+                <p>请检查 data/goals.json 文件是否存在</p>
               </div>
             `;
-            container.appendChild(updateEl);
           });
-        })
-        .catch(error => {
-          console.error('加载更新数据失败:', error);
-          document.getElementById('update-feed').innerHTML = `
-            <div class="update-card">
-              <p>⚠️ 暂时无法加载最新动态</p>
-              <p>错误信息: ${error.message}</p>
-              <p>请检查 data/updates.json 文件是否存在</p>
+      }
+      
+      // 渲染学习目标
+      function renderGoals(goals) {
+        const container = document.getElementById('goals-container');
+        container.innerHTML = '';
+        
+        goals.forEach(goal => {
+          const goalEl = document.createElement('div');
+          goalEl.className = 'card';
+          goalEl.innerHTML = `
+            <div class="progress-container">
+              <div class="progress-header">
+                <span>${goal.title}</span>
+                <span>${goal.progress}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-value" style="width: ${goal.progress}%"></div>
+              </div>
+            </div>
+            <ul class="task-list">
+              ${goal.tasks.map(task => `
+                <li class="${task.status}">
+                  ${task.name}
+                </li>
+              `).join('')}
+            </ul>
+          `;
+          container.appendChild(goalEl);
+        });
+      }
+      
+      // 加载最新动态数据
+      function loadUpdatesData() {
+        fetch(`${basePath}/data/updates.json`)
+          .then(response => {
+            if (!response.ok) throw new Error('动态数据加载失败');
+            return response.json();
+          })
+          .then(updates => renderUpdates(updates))
+          .catch(error => {
+            document.getElementById('update-feed').innerHTML = `
+              <div class="update-card">
+                <h3>数据加载错误</h3>
+                <p>${error.message}</p>
+                <p>请检查 data/updates.json 文件是否存在</p>
+              </div>
+            `;
+          });
+      }
+      
+      // 渲染最新动态
+      function renderUpdates(updates) {
+        const container = document.getElementById('update-feed');
+        container.innerHTML = '';
+        
+        updates.slice(0, 5).forEach(item => {
+          const typeIcon = {
+            'demo': 'fa-code',
+            'article': 'fa-file-lines',
+            'milestone': 'fa-flag-checkered'
+          }[item.type] || 'fa-bullhorn';
+          
+          // 确保链接正确（添加基础路径）
+          const itemLink = item.link.startsWith('http') ? 
+                          item.link : 
+                          `${basePath}${item.link.startsWith('/') ? '' : '/'}${item.link}`;
+          
+          const updateEl = document.createElement('div');
+          updateEl.className = 'update-card';
+          updateEl.innerHTML = `
+            <div class="update-header">
+              <span class="update-date">${item.date}</span>
+              <span class="update-type">
+                <i class="fa-solid ${typeIcon}"></i> ${item.type}
+              </span>
+            </div>
+            <h3><a href="${itemLink}">${item.title}</a></h3>
+            <p>${item.description}</p>
+            <div class="tags">
+              ${item.tags.map(tag => `<span>${tag}</span>`).join('')}
             </div>
           `;
+          container.appendChild(updateEl);
         });
+      }
+      
+      // 加载项目数据
+      function loadDemosData() {
+        fetch(`${basePath}/data/demos.json`)
+          .then(response => {
+            if (!response.ok) throw new Error('项目数据加载失败');
+            return response.json();
+          })
+          .then(demos => renderDemos(demos))
+          .catch(error => {
+            document.getElementById('demos-container').innerHTML = `
+              <div class="update-card">
+                <h3>数据加载错误</h3>
+                <p>${error.message}</p>
+                <p>请检查 data/demos.json 文件是否存在</p>
+              </div>
+            `;
+          });
+      }
+      
+      // 渲染项目展示
+      function renderDemos(demos) {
+        const container = document.getElementById('demos-container');
+        container.innerHTML = '';
+        
+        demos.forEach(demo => {
+          // 确保链接正确（添加基础路径）
+          const demoLink = demo.link.startsWith('http') ? 
+                          demo.link : 
+                          `${basePath}${demo.link.startsWith('/') ? '' : '/'}${demo.link}`;
+          
+          const statusClass = {
+            'completed': 'status-completed',
+            'in-progress': 'status-inprogress',
+            'planned': 'status-planned'
+          }[demo.status] || '';
+          
+          const statusText = {
+            'completed': '已完成',
+            'in-progress': '进行中',
+            'planned': '计划中'
+          }[demo.status] || demo.status;
+          
+          const demoEl = document.createElement('a');
+          demoEl.className = 'demo-card';
+          demoEl.href = demoLink;
+          demoEl.innerHTML = `
+            <div class="demo-image">
+              <i class="fa-solid ${demo.icon}"></i>
+            </div>
+            <div class="demo-info">
+              <h3>${demo.title}</h3>
+              <p>${demo.description}</p>
+              <div class="demo-meta">
+                <span>${demo.date}</span>
+                <span class="demo-status ${statusClass}">${statusText}</span>
+              </div>
+            </div>
+          `;
+          container.appendChild(demoEl);
+        });
+      }
     });
   </script>
 </body>
