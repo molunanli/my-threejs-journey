@@ -6,7 +6,11 @@
     <title>Three.js学习笔记</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
+    <!-- 添加 highlight.js 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
     <style>
         :root {
             --primary: #3498db;
@@ -566,7 +570,12 @@
             gfm: true,
             breaks: true,
             smartLists: true,
-            smartypants: true
+            smartypants: true,
+            highlight: function (code, language) {
+                // 使用highlight.js进行代码高亮
+                const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
+                return hljs.highlight(validLanguage, code).value;
+            }
         });
         
         // 初始化页面
@@ -620,6 +629,7 @@
                             <h3>数据加载错误</h3>
                             <p>${error.message}</p>
                             <p>请确保 data/notes.json 文件存在</p>
+                            <p>路径: ${basePath}/data/notes.json</p>
                         </div>
                     `;
                 });
@@ -725,7 +735,9 @@
             // 从服务器加载Markdown文件
             fetch(`${basePath}/${filename}`)
                 .then(response => {
-                    if (!response.ok) throw new Error('笔记内容加载失败');
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误! 状态: ${response.status}`);
+                    }
                     return response.text();
                 })
                 .then(text => {
@@ -736,7 +748,8 @@
                         <div class="error-message">
                             <h3>文件加载错误</h3>
                             <p>${error.message}</p>
-                            <p>请确保 ${filename} 文件存在</p>
+                            <p>文件路径: ${basePath}/${filename}</p>
+                            <p>请确保文件存在且路径正确</p>
                         </div>
                     `;
                 });
@@ -746,11 +759,6 @@
         function renderMarkdown(content) {
             const htmlContent = marked.parse(content);
             document.getElementById('note-content').innerHTML = htmlContent;
-            
-            // 添加代码高亮（可选）
-            document.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightBlock(block);
-            });
         }
         
         // 加载上一篇笔记
