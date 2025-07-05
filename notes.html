@@ -3,27 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js学习笔记</title>
+    <title>Three.js学习笔记 | 动态数据展示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css">
-    <!-- 添加 highlight.js 代码高亮 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
     <style>
         :root {
-            --primary: #3498db;
-            --primary-light: #5dade2;
-            --primary-dark: #2980b9;
-            --bg-light: #f8f9fa;
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3f37c9;
+            --accent: #f72585;
+            --bg-light: #f8f9ff;
             --bg-card: #ffffff;
-            --text-main: #2c3e50;
-            --text-light: #7f8c8d;
-            --border: #e0e0e0;
-            --shadow: rgba(0, 0, 0, 0.05);
-            --success: #2ecc71;
-            --warning: #f39c12;
+            --text-main: #2b2d42;
+            --text-light: #8d99ae;
+            --border: #e9ecef;
+            --shadow: rgba(67, 97, 238, 0.08);
+            --success: #4cc9f0;
+            --warning: #fca311;
+            --gradient: linear-gradient(135deg, var(--primary), var(--primary-dark));
         }
         
         * {
@@ -33,24 +34,26 @@
         }
         
         body {
-            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-light);
+            font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+            background: var(--bg-light);
             color: var(--text-main);
-            line-height: 1.6;
+            line-height: 1.7;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background-image: radial-gradient(circle at 1% 1%, rgba(67, 97, 238, 0.03) 0%, transparent 90%);
         }
         
         /* 头部样式 */
         header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: var(--gradient);
             color: white;
-            padding: 1.5rem 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(5px);
         }
         
         .header-content {
@@ -65,6 +68,11 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateX(5px);
         }
         
         .logo-icon {
@@ -72,25 +80,33 @@
             background: rgba(255,255,255,0.15);
             width: 45px;
             height: 45px;
-            border-radius: 50%;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(15deg);
+            background: rgba(255,255,255,0.25);
         }
         
         .logo-text h1 {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .logo-text p {
             font-size: 0.85rem;
-            opacity: 0.9;
+            opacity: 0.85;
+            font-weight: 300;
         }
         
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.8rem;
         }
         
         .nav-links a {
@@ -101,17 +117,34 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
         }
         
         .nav-links a:hover {
             opacity: 1;
-            text-decoration: underline;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
         }
         
         /* 笔记容器 */
         .note-container {
             flex: 1;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 3rem auto;
             width: 100%;
             padding: 0 2rem;
@@ -121,159 +154,235 @@
         .note-nav {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
+            align-items: flex-start;
         }
         
         .note-title {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2.4rem;
+            font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.2;
+            max-width: 700px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .note-meta {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.2rem;
             color: var(--text-light);
             font-size: 0.95rem;
+            flex-wrap: wrap;
         }
         
         .nav-buttons {
             display: flex;
             gap: 1rem;
             align-items: center;
+            margin-top: 0.5rem;
         }
         
         .nav-btn {
-            padding: 0.7rem 1.2rem;
-            background: var(--bg-light);
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            gap: 0.7rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.08);
         }
         
         .nav-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.2);
         }
         
         .nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
         
         .nav-btn:disabled:hover {
-            background: var(--bg-light);
+            background: var(--bg-card);
             color: inherit;
             border-color: var(--border);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.08);
         }
         
         /* 笔记内容 */
         .note-content {
             background: var(--bg-card);
-            border-radius: 12px;
-            box-shadow: 0 5px 15px var(--shadow);
-            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px var(--shadow);
+            padding: 3.5rem;
             margin-bottom: 3rem;
+            border: 1px solid rgba(67, 97, 238, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
         }
         
         .markdown-body {
-            font-size: 1.05rem;
+            font-size: 1.08rem;
             line-height: 1.8;
+            color: #4a4a6a;
         }
         
         .markdown-body h1 {
-            margin: 2rem 0 1rem;
-            padding-bottom: 0.5rem;
+            margin: 2.5rem 0 1.5rem;
+            padding-bottom: 0.8rem;
             border-bottom: 1px solid var(--border);
             color: var(--text-main);
+            font-weight: 800;
         }
         
         .markdown-body h2 {
-            margin: 1.8rem 0 1rem;
+            margin: 2.2rem 0 1.2rem;
             color: var(--primary-dark);
+            font-weight: 700;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown-body h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
         }
         
         .markdown-body h3 {
-            margin: 1.5rem 0 0.8rem;
+            margin: 1.8rem 0 1rem;
             color: var(--primary);
+            font-weight: 600;
         }
         
         .markdown-body p {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
         }
         
         .markdown-body pre {
             background: #2c3e50;
             color: #ecf0f1;
-            border-radius: 8px;
-            padding: 1.2rem;
+            border-radius: 12px;
+            padding: 1.5rem;
             overflow: auto;
-            margin: 1.5rem 0;
+            margin: 1.8rem 0;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--primary);
         }
         
         .markdown-body code {
-            background: rgba(52, 152, 219, 0.1);
+            background: rgba(67, 97, 238, 0.08);
             color: var(--primary-dark);
-            border-radius: 4px;
-            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            padding: 0.25em 0.5em;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.95rem;
         }
         
         .markdown-body ul, .markdown-body ol {
-            margin: 1rem 0 1rem 2rem;
+            margin: 1.2rem 0 1.2rem 2.2rem;
         }
         
         .markdown-body li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+        
+        .markdown-body ul li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -1.2rem;
         }
         
         .markdown-body table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            overflow: hidden;
         }
         
         .markdown-body th, .markdown-body td {
-            padding: 0.8rem;
+            padding: 1rem;
             border: 1px solid var(--border);
             text-align: left;
         }
         
         .markdown-body th {
-            background: var(--bg-light);
+            background: rgba(67, 97, 238, 0.1);
             font-weight: 600;
+            color: var(--primary-dark);
         }
         
         /* 页脚 */
         footer {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            background: var(--gradient);
             color: white;
-            padding: 2rem;
+            padding: 3rem 2rem 2.5rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
         
         .footer-content {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
         
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin: 1.5rem 0;
+            gap: 2.5rem;
+            margin: 1.8rem 0;
+            flex-wrap: wrap;
         }
         
         .footer-links a {
@@ -282,17 +391,20 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-weight: 500;
+            padding: 0.5rem;
         }
         
         .footer-links a:hover {
             text-decoration: underline;
+            transform: translateY(-3px);
         }
         
         /* 响应式设计 */
         @media (max-width: 900px) {
             .note-content {
-                padding: 2rem;
+                padding: 2.5rem;
             }
             
             .note-nav {
@@ -301,32 +413,56 @@
             }
             
             .nav-buttons {
+                width: 100%;
                 justify-content: center;
             }
         }
         
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 1rem;
+                gap: 1.2rem;
             }
             
             .logo {
                 justify-content: center;
             }
             
-            .note-content {
-                padding: 1.5rem;
+            .nav-links {
+                justify-content: center;
             }
             
+            .note-content {
+                padding: 1.8rem;
+            }
+            
+            .note-title {
+                font-size: 2rem;
+            }
+            
+            .note-meta {
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
             .note-title {
                 font-size: 1.8rem;
             }
             
             .note-meta {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.7rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
         
@@ -350,24 +486,31 @@
         
         /* 错误提示 */
         .error-message {
-            background: rgba(231, 76, 60, 0.1);
-            border-left: 4px solid #e74c3c;
+            background: rgba(252, 163, 17, 0.1);
+            border-left: 4px solid var(--warning);
             padding: 1.5rem;
-            border-radius: 0 6px 6px 0;
-            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+            color: #6d4c00;
         }
         
         /* 标签样式 */
         .tag {
-            background: rgba(52, 152, 219, 0.1);
+            background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: rgba(67, 97, 238, 0.2);
+            transform: translateY(-2px);
         }
         
         .tag i {
@@ -377,38 +520,54 @@
         /* 笔记预览卡片 */
         .notes-preview {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
         }
         
         .note-card {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(67, 97, 238, 0.1);
             display: flex;
             flex-direction: column;
             height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .note-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
         }
         
         .note-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.2);
         }
         
         .note-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
             color: var(--text-main);
+            position: relative;
+            z-index: 2;
         }
         
         .note-card p {
             color: var(--text-light);
             flex-grow: 1;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
         
         .note-card .meta {
@@ -417,61 +576,76 @@
             color: var(--text-light);
             font-size: 0.9rem;
             border-top: 1px solid var(--border);
-            padding-top: 1rem;
+            padding-top: 1.2rem;
             margin-top: auto;
+            position: relative;
+            z-index: 2;
         }
         
         .note-card .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
+            gap: 0.7rem;
+            margin-top: 1rem;
+            position: relative;
+            z-index: 2;
         }
         
         .note-card .tag {
             font-size: 0.8rem;
-            padding: 0.2rem 0.6rem;
+            padding: 0.3rem 0.8rem;
         }
         
         .back-to-list {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(52, 152, 219, 0.1);
-            padding: 0.7rem 1.2rem;
-            border-radius: 6px;
+            gap: 10px;
+            background: rgba(67, 97, 238, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
             color: var(--primary);
             text-decoration: none;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
+            margin-bottom: 2rem;
+            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.1);
         }
         
         .back-to-list:hover {
-            background: rgba(52, 152, 219, 0.2);
+            background: rgba(67, 97, 238, 0.2);
+            transform: translateX(-5px);
         }
         
         .section-title {
-            font-size: 1.8rem;
-            color: var(--primary-dark);
-            margin: 2rem 0 1.5rem;
-            padding-bottom: 0.8rem;
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin: 2.5rem 0 2rem;
+            padding-bottom: 1rem;
             border-bottom: 2px solid var(--primary);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            font-weight: 800;
         }
         
         .section-title i {
-            background: var(--primary);
+            background: var(--gradient);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+        }
+        
+        .intro-text {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
         }
     </style>
 </head>
@@ -485,7 +659,7 @@
                 </div>
                 <div class="logo-text">
                     <h1>Three.js学习笔记</h1>
-                    <p>Markdown知识库</p>
+                    <p>探索3D世界的知识库</p>
                 </div>
             </div>
             <div class="nav-links">
@@ -500,8 +674,8 @@
     <div class="note-container">
         <!-- 笔记列表视图 -->
         <div id="notes-list-view" style="display: none;">
-            <h1 class="section-title"><i class="fas fa-book"></i> 全部学习笔记</h1>
-            <p>以下是系统化的Three.js学习笔记，涵盖核心概念、实战技巧和高级主题。</p>
+            <h1 class="section-title"><i class="fas fa-book-open"></i> 全部学习笔记</h1>
+            <p class="intro-text">系统化的Three.js学习笔记库，涵盖核心概念、实战技巧和高级主题。每篇笔记都包含详细解释和代码示例，帮助你掌握WebGL和3D开发。</p>
             
             <div id="notes-list-container" class="notes-preview">
                 <div class="loader">
@@ -518,11 +692,11 @@
                     <a href="#" id="back-to-list" class="back-to-list">
                         <i class="fas fa-arrow-left"></i> 返回笔记列表
                     </a>
-                    <h1 class="note-title" id="note-title">Three.js核心概念</h1>
+                    <h1 class="note-title" id="note-title">加载中...</h1>
                     <div class="note-meta">
-                        <span class="tag"><i class="far fa-calendar"></i> <span id="note-date">2023-11-20</span></span>
-                        <span class="tag"><i class="fas fa-tags"></i> <span id="note-tags">基础, 概念</span></span>
-                        <span class="tag"><i class="far fa-clock"></i> 阅读时间 <span id="read-time">8</span>分钟</span>
+                        <span class="tag"><i class="far fa-calendar"></i> <span id="note-date">-</span></span>
+                        <span class="tag"><i class="fas fa-tags"></i> <span id="note-tags">-</span></span>
+                        <span class="tag"><i class="far fa-clock"></i> 阅读时间 <span id="read-time">-</span>分钟</span>
                     </div>
                 </div>
                 <div class="nav-buttons">
@@ -549,11 +723,12 @@
     <!-- 页脚 -->
     <footer>
         <div class="footer-content">
-            <p>Three.js学习笔记库 &copy; 2023 - 使用GitHub Pages部署</p>
+            <p>Three.js学习笔记库 &copy; 2023 | 构建知识体系，掌握3D开发</p>
             <div class="footer-links">
                 <a href="#"><i class="fab fa-github"></i> 源码仓库</a>
                 <a href="https://threejs.org/docs/" target="_blank"><i class="fas fa-book"></i> Three.js文档</a>
                 <a href="#"><i class="fas fa-envelope"></i> 联系作者</a>
+                <a href="#"><i class="fab fa-twitter"></i> 分享</a>
             </div>
             <p>笔记内容通过Markdown文件存储，使用Git进行版本控制</p>
         </div>
@@ -622,6 +797,12 @@
                 .then(notes => {
                     notesList = notes;
                     renderNotesList();
+                    
+                    // 如果没有URL参数，加载第一篇笔记
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (!urlParams.get('id') && notesList.length > 0) {
+                        loadCurrentNote();
+                    }
                 })
                 .catch(error => {
                     document.getElementById('notes-list-container').innerHTML = `
@@ -715,7 +896,7 @@
             if (index !== -1) {
                 currentNoteIndex = index;
                 loadCurrentNote();
-            } else {
+            } else if (notesList.length > 0) {
                 // 如果没找到，显示第一篇笔记
                 currentNoteIndex = 0;
                 loadCurrentNote();
