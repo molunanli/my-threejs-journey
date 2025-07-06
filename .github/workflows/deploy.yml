@@ -1,0 +1,30 @@
+name: Deploy Demos to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'demos/**'  # 仅当 demos 目录有变化时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取所有历史记录
+
+      - name: Setup deployment directory
+        run: |
+          # 创建临时目录存放 demos
+          mkdir -p deploy_target
+          # 复制整个 demos 目录到临时目录
+          cp -R demos deploy_target/
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: deploy_target  # 发布整个临时目录
+          keep_files: true  # 保留现有文件（其他 demo 不受影响）
